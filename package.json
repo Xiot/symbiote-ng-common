@@ -1,6 +1,6 @@
 {
   "name": "symbiote-ng-common",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "Common angular services and directives",
   "main": "index.js",
   "scripts": {

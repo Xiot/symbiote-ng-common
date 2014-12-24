@@ -18,8 +18,8 @@ var paths = {
         dist: 'dist'
     },
     pkg: {
-        bower: './bower.json',
-        npm: './package.json'
+        bower: 'bower.json',
+        npm: 'package.json'
     }
 }
 
@@ -66,7 +66,7 @@ gulp.task('compile:src:js', function() {
 });
 gulp.task('default', ['compile:src:js', 'compile:src:html']);
 
-gulp.task('release', ['default'], function() {
+gulp.task('release', [], function() {
 
     var inc = env.inc;
     var tag = env.tag;
