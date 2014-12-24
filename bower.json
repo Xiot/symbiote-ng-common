@@ -6,7 +6,7 @@
     "Xiot <xiotox@gmail.com>"
   ],
   "description": "Common angular services and directives",
-  "main": "index.js",
+  "main": "dist/symbiote-ng-common.js",
   "keywords": [
     "angular"
   ],
