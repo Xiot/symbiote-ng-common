@@ -64,43 +64,85 @@ gulp.task('compile:src:js', function() {
         .pipe(plug.sourcemaps.write('./'))
         .pipe(gulp.dest(paths.output.dist));
 });
+
 gulp.task('default', ['compile:src:js', 'compile:src:html']);
+
+gulp.task('bump', function(){
+
+    var files = [paths.pkg.bower, paths.pkg.npm];
+    return bump(files, env);
+})
 
 gulp.task('release', [], function() {
 
-    var inc = env.inc;
-    var tag = env.tag;
-    var setVersion = env.version;
-    var newVersion = null;
+    var files = [paths.pkg.bower, paths.pkg.npm];
 
-    if (!setVersion) {
-        var bower = readJson(paths.pkg.bower);
-
-        var current = semver(bower.version);
-        var currentTag = current.prerelease && current.prerelease.length > 0 && current.prerelease[0];
-
-        if (!inc && currentTag) {
-            inc = 'prerelease';
-            tag = tag || currentTag;
-
-        } else if (!inc && !currentTag) {
-            inc = "patch";
-        }
-        newVersion = current.inc(inc, tag);
-    } else {
-        newVersion = semver(setVersion);
-    }
-
-    return gulp.src([paths.pkg.bower, paths.pkg.npm])
-        .pipe(plug.bump({
-            version: newVersion.format()
-        }))
-        .pipe(gulp.dest('./'))
+    return bump(files, env)
         .pipe(plug.git.commit('chore(release) v' + newVersion))
         .pipe(plug.filter(paths.pkg.bower))
-        .pipe(plug.tagVersion());
+        .pipe(plug.tagVersion())
+
+    // var inc = env.inc;
+    // var tag = env.tag;
+    // var setVersion = env.version;
+    // var newVersion = null;
+
+    // if (!setVersion) {
+    //     var bower = readJson(paths.pkg.bower);
+
+    //     var current = semver(bower.version);
+    //     var currentTag = current.prerelease && current.prerelease.length > 0 && current.prerelease[0];
+
+    //     if (!inc && currentTag) {
+    //         inc = 'prerelease';
+    //         tag = tag || currentTag;
+
+    //     } else if (!inc && !currentTag) {
+    //         inc = "patch";
+    //     }
+    //     newVersion = current.inc(inc, tag);
+    // } else {
+    //     newVersion = semver(setVersion);
+    // }
+
+    // return gulp.src([paths.pkg.bower, paths.pkg.npm])
+    //     .pipe(plug.bump({
+    //         version: newVersion.format()
+    //     }))
+    //     .pipe(gulp.dest('./'))
+    //     .pipe(plug.git.commit('chore(release) v' + newVersion))
+    //     .pipe(plug.filter(paths.pkg.bower))
+    //     .pipe(plug.tagVersion());
 });
 
+function bump(files, args) {
+    var nextVersion = getBumpedVersion(files[0], args);
+    return gulp.src(files)
+        .pipe(plug.bump({
+            version: nextVersion.format()
+        }))
+        .pipe(gulp.dest('./'));
+}
+
+function getBumpedVersion(pkgFile, args) {
+    if (args.version)
+        return semver(args.version);
+
+    var pkg = readJson(pkgFile);
+    var pkgVersion = semver(pkg.version);
+
+    var currentTag = pkgVersion.prerelease && pkgVersion.prerelease.length > 0 && pkgVersion.prerelease[0];
+
+    if (!args.inc && currentTag) {
+        args.inc = 'prerelease';
+        args.tag = args.tag || currentTag;
+
+    } else if (!args.inc && !currentTag) {
+        args.inc = "patch";
+    }
+
+    return pkgVersion.inc(args.inc, args.tag);
+}
 
 var readJson = function(path) {
     return JSON.parse(fs.readFileSync(path, 'utf8'));
