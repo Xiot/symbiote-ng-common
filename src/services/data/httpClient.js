@@ -2,7 +2,7 @@
     .provider('httpClient', HttpClientProvider);
 
 function HttpClientProvider() {
-    
+
     this.baseUri = "";
     this.authTokenName = "auth-token";
     this.authTokenType = "Bearer";
@@ -23,8 +23,8 @@ function HttpClientProvider() {
         };
         return service;
 
-        function _get(uri, config) {            
-            return _execute('GET', uri, null, config);            
+        function _get(uri, config) {
+            return _execute('GET', uri, null, config);
         }
 
         function _post(uri, data, config) {
@@ -46,13 +46,13 @@ function HttpClientProvider() {
         function _execute(method, uri, data, config) {
 
             config = _extendConfig(config);
-            
+
             var request = {
                 method: method,
                 url: _getAbsoluteUri(uri),
                 data: data
             };
-  
+
             angular.extend(request, config);
 
             if (config.forceRefresh) {
@@ -73,9 +73,7 @@ function HttpClientProvider() {
             if (uri.startsWith('/') && provider.baseUri.endsWith('/'))
                 uri = uri.substring(1);
 
-            return uri.indexOf('://', 0) < 0
-                ? provider.baseUri + uri
-                : uri;
+            return uri.indexOf('://', 0) < 0 ? provider.baseUri + uri : uri;
         }
 
         function _extendConfig(config) {
@@ -91,12 +89,20 @@ function HttpClientProvider() {
                     authKey += scheme + ' ' + config.auth[scheme] + ' ';
                 }
 
-                angular.extend(config, { headers: { Authorization: authKey } }, angular.copy(config));
+                angular.extend(config, {
+                    headers: {
+                        Authorization: authKey
+                    }
+                }, angular.copy(config));
 
             } else if (provider.authTokenName && provider.authTokenType) {
                 var token = storageService.get(provider.authTokenName);
                 if (token) {
-                    angular.extend(config, { headers: { Authorization: provider.authTokenType + ' ' + token } }, angular.copy(config));
+                    angular.extend(config, {
+                        headers: {
+                            Authorization: provider.authTokenType + ' ' + token
+                        }
+                    }, angular.copy(config));
                 }
             }
             return config;

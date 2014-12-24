@@ -1,1 +1,1 @@
-angular.module('symbiote.data',[]);
+angular.module('symbiote.data', []);

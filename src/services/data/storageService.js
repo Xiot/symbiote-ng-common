@@ -1,5 +1,5 @@
 ﻿angular.module('symbiote.data')
-.factory('storageService', StorageService);
+    .factory('storageService', StorageService);
 
 /* @ngInject */
 function StorageService($window) {
@@ -13,7 +13,6 @@ function StorageService($window) {
         has: _has,
         remove: _remove
     };
-
 
     function _get(key) {
 
