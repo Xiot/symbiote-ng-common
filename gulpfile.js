@@ -78,7 +78,7 @@ gulp.task('release', [], function() {
     var files = [paths.pkg.bower, paths.pkg.npm];
 
     return bump(files, env)
-        .pipe(plug.git.commit('chore(release) v' + newVersion))
+        .pipe(plug.git.commit('chore(release) v' + env.version))
         .pipe(plug.filter(paths.pkg.bower))
         .pipe(plug.tagVersion())
 
@@ -141,7 +141,8 @@ function getBumpedVersion(pkgFile, args) {
         args.inc = "patch";
     }
 
-    return pkgVersion.inc(args.inc, args.tag);
+    env.version = pkgVersion.inc(args.inc, args.tag);
+    return env.version;
 }
 
 var readJson = function(path) {
