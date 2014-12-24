@@ -1,6 +1,6 @@
 {
   "name": "symbiote-ng-common",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Common angular services and directives",
   "main": "index.js",
   "scripts": {
@@ -24,15 +24,20 @@
     "gulp": "^3.8.10",
     "gulp-angular-filesort": "^1.0.4",
     "gulp-angular-templatecache": "^1.5.0",
+    "gulp-bump": "^0.1.11",
     "gulp-concat": "^2.4.2",
+    "gulp-filter": "^2.0.0",
+    "gulp-git": "^0.5.5",
     "gulp-htmlmin": "^0.2.0",
     "gulp-load-plugins": "^0.8.0",
     "gulp-ng-annotate": "^0.4.3",
     "gulp-size": "^1.1.0",
     "gulp-sourcemaps": "^1.2.8",
+    "gulp-tag-version": "^1.2.1",
     "gulp-util": "^3.0.1",
     "gulp-wrap-js": "^0.2.0",
     "run-sequence": "^1.0.2",
+    "semver": "^4.2.0",
     "wiredep": "^2.2.2"
   }
 }
