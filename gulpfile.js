@@ -74,7 +74,7 @@ gulp.task('bump', false, function(){
     return bump(files, env);
 })
 
-gulp.task('release','Bumps the version, and creates a tag', [], function() {
+gulp.task('release','Bumps the version, and creates a tag', ['default'], function() {
 
     var files = [paths.pkg.bower, paths.pkg.npm];
 
