@@ -1,4 +1,5 @@
-﻿var gulp = require('gulp');
+﻿var gulp =require('gulp-help')(require('gulp'));
+
 var plug = require('gulp-load-plugins')();
 var wiredep = require('wiredep');
 var es = require('event-stream');
@@ -23,7 +24,7 @@ var paths = {
     }
 }
 
-gulp.task('compile:src:html', function() {
+gulp.task('compile:src:html', 'Compile templates', function() {
     return gulp.src(paths.src.templates)
         .pipe(plug.size({
             title: 'before'
@@ -49,7 +50,7 @@ gulp.task('compile:src:html', function() {
         .pipe(gulp.dest(paths.output.dist));
 })
 
-gulp.task('compile:src:js', function() {
+gulp.task('compile:src:js', 'Compile JS', function() {
     return gulp.src(paths.src.js)
         .pipe(plug.sourcemaps.init())
 
@@ -65,15 +66,15 @@ gulp.task('compile:src:js', function() {
         .pipe(gulp.dest(paths.output.dist));
 });
 
-gulp.task('default', ['compile:src:js', 'compile:src:html']);
+gulp.task('default', 'Compile the JS and HTML', ['compile:src:js', 'compile:src:html']);
 
-gulp.task('bump', function(){
+gulp.task('bump', false, function(){
 
     var files = [paths.pkg.bower, paths.pkg.npm];
     return bump(files, env);
 })
 
-gulp.task('release', [], function() {
+gulp.task('release','Bumps the version, and creates a tag', [], function() {
 
     var files = [paths.pkg.bower, paths.pkg.npm];
 
@@ -81,6 +82,12 @@ gulp.task('release', [], function() {
         .pipe(plug.git.commit('chore(release) v' + env.version))
         .pipe(plug.filter(paths.pkg.bower))
         .pipe(plug.tagVersion())
+}, {
+    options: {
+        'version': 'The SemVer to bump the release to.',
+        'inc=bump': 'one of: major, minor, patch, premajor, preminor, prepatch, prerelase',
+        'tag=name': 'The name of the prerelase tag. If ommited then the current tag will be used'
+    }
 });
 
 function bump(files, args) {
@@ -103,7 +110,7 @@ function getBumpedVersion(pkgFile, args) {
 
     if (!args.inc && currentTag) {
         args.inc = 'prerelease';
-        args.tag = args.tag || currentTag;
+        args.tag = args.tag || currentTag || 'build';
 
     } else if (!args.inc && !currentTag) {
         args.inc = "patch";
