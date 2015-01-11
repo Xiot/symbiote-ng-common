@@ -80,6 +80,7 @@ function HttpClientProvider() {
 
             config = config || {};
             
+            
             //TODO: Move the authentication token stuff into an interceptor
             if (config.auth) {
 
