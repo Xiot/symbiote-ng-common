@@ -78,9 +78,8 @@ function HttpClientProvider() {
 
         function _extendConfig(config) {
 
-            if (!config)
-                return {};
-
+            config = config || {};
+            
             //TODO: Move the authentication token stuff into an interceptor
             if (config.auth) {
 
