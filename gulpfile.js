@@ -74,12 +74,12 @@ gulp.task('bump', false, function(){
     return bump(files, env);
 })
 
-gulp.task('release','Bumps the version, and creates a tag', ['default'], function() {
+gulp.task('release','Bumps the version, and creates a tag', [], function() {
 
     var files = [paths.pkg.bower, paths.pkg.npm];
 
     return bump(files, env)
-        .pipe(plug.addSrc(paths.output + '/*.*'))   // Techinally I should have tested / validated the output before i publish.
+        //.pipe(plug.addSrc(paths.output + '/*.*'))   // Techinally I should have tested / validated the output before i publish.
         .pipe(plug.git.commit('chore(release) v' + env.version))
         .pipe(plug.filter(paths.pkg.bower))
         .pipe(plug.tagVersion())
